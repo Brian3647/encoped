@@ -1,0 +1,12 @@
+[package]
+name = "encoped"
+version = "0.0.1"
+edition = "2021"
+
+[dependencies]
+structopt = "0.3.25"
+lazy_static = "1.4.0"
+notify = "4.0.17"
+glob = "0.3.0"
+regex = "1.5.4"
+colored = "2.0.0"
