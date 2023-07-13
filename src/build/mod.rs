@@ -135,23 +135,23 @@ pub fn build_file(path: &Path) -> String {
 	res
 }
 
-fn copy_extras() {
-	let extras = PathBuf::from("./extras");
+fn copy_assets() {
+	let assets = PathBuf::from("./assets");
 	let dist = PathBuf::from("./dist");
 
-	if !extras.exists() {
-		println!("{} 'extras' directory", "~> creating".bright_yellow());
+	if !assets.exists() {
+		println!("{} 'assets' directory", "~> creating".bright_yellow());
 
-		create_dir_all(&extras).unwrap_or_else(|e| {
-			println!("{} to create 'extras' directory: {}", "~> failed".red(), e);
+		create_dir_all(&assets).unwrap_or_else(|e| {
+			println!("{} to create 'assets' directory: {}", "~> failed".red(), e);
 			exit(1);
 		});
 	}
 
-	for entry in read_dir(&extras).unwrap() {
+	for entry in read_dir(&assets).unwrap() {
 		let entry = entry.unwrap();
-		let file_name = extras.file_name().unwrap().to_str().unwrap();
-		let file_path = extras.join(file_name);
+		let file_name = assets.file_name().unwrap().to_str().unwrap();
+		let file_path = assets.join(file_name);
 
 		let file_path = file_path.to_owned(); // Clone the file path.
 
@@ -166,8 +166,8 @@ fn copy_extras() {
 pub fn release() {
 	println!("{}\n", "~> building (1/3): html".bright_magenta());
 	compile();
-	println!("{}\n", "~> building (2/3): extras".bright_magenta());
-	copy_extras();
+	println!("{}\n", "~> building (2/3): assets".bright_magenta());
+	copy_assets();
 	println!("\n{}", "~> building (2/3): typescript".bright_magenta());
 
 	Command::new("./node_modules/.bin/rollup")
