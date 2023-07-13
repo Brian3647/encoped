@@ -149,11 +149,12 @@ fn copy_assets() {
 	}
 
 	for entry in read_dir(&assets).unwrap() {
-		let entry = entry.unwrap();
-		let file_name = assets.file_name().unwrap().to_str().unwrap();
-		let file_path = assets.join(file_name);
+		let entry = &entry.unwrap();
+		let file_name = entry.file_name();
+		let file_path = assets.join(file_name.to_str().unwrap());
+		let file_path = file_path.to_owned();
 
-		let file_path = file_path.to_owned(); // Clone the file path.
+		println!("{} {}", "~> copied".bright_green(), file_path.display());
 
 		if entry.metadata().unwrap().is_dir() {
 			create_dir_all(dist.join(file_name)).unwrap();
@@ -164,11 +165,11 @@ fn copy_assets() {
 }
 
 pub fn release() {
-	println!("{}\n", "~> building (1/3): html".bright_magenta());
+	println!("{}", "~> building (1/3): html".bright_magenta());
 	compile();
-	println!("{}\n", "~> building (2/3): assets".bright_magenta());
+	println!("{}", "~> building (2/3): assets".bright_magenta());
 	copy_assets();
-	println!("\n{}", "~> building (2/3): typescript".bright_magenta());
+	println!("{}", "~> building (2/3): typescript".bright_magenta());
 
 	Command::new("./node_modules/.bin/rollup")
 		.arg("-c")

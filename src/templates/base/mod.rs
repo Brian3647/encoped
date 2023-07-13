@@ -17,7 +17,8 @@ pub const PACKAGE_JSON: &str = concatln!(
 	"\t\"name\": \"{name}\",",
 	"\t\"version\": \"0.0.0\",",
 	"\t\"private\": true,",
-	"\t\"license\": \"GPL-3.0-or-later\"",
+	"\t\"license\": \"GPL-3.0-or-later\",",
+	"\t\"type\": \"module\"",
 	"}"
 );
 
