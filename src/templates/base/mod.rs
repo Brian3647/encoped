@@ -57,7 +57,7 @@ lazy_static::lazy_static! {
 		res.insert(".gitattributes", GITATTRIBUTES);
 		res.insert("public/index.html", BASE_HTML);
 		res.insert("src/main.ts", "console.log('Hello, world!');\n");
-		res.insert("templates/hello.html", "<h1>This is awesome!</h1>\n");
+		res.insert("templates/hello.html", "<h1 class=\"red\">This is awesome!</h1>\n");
 		res.insert("templates/information/math.html", "Did you know 1 + 1 = 2?\n");
 		res.insert("templates/information/all.html", "<p>{{ templates::information/math }}</p>\n{{ templates::information/example }}\n");
 		res.insert("templates/information/example.html", "This is quiet.. add something in templates/information/example.html!\n");
