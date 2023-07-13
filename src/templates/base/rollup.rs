@@ -1,8 +1,8 @@
 use crate::concatln;
 
 pub const ROLLUP_CONFIG: &str = concatln!(
-	"import typescript from 'rollup-plugin-typescript2';",
-	"import { terser } from 'rollup-plugin-terser';",
+	"import typescript from '@rollup/plugin-typescript';",
+	"import terser from '@rollup/plugin-terser';",
 	"",
 	"const production = !process.env.ROLLUP_WATCH;",
 	"",

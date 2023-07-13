@@ -9,7 +9,7 @@ pub const TSCONFIG_JSON: &str = concatln!(
 	"\t\t\"lib\": [\"ESNext\", \"DOM\"],",
 	"\t\t\"moduleResolution\": \"Node\",",
 	"\t\t\"strict\": true,",
-	"\t\t\"sourceMap\": true,",
+	"\t\t\"sourceMap\": false,",
 	"\t\t\"esModuleInterop\": true,",
 	"\t\t\"noEmit\": true,",
 	"\t\t\"noUnusedLocals\": true,",

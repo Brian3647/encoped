@@ -1,6 +1,5 @@
 use colored::Colorize;
 use notify::watcher;
-use notify::DebouncedEvent;
 use notify::Error;
 use notify::RecursiveMode;
 use notify::Watcher;
@@ -150,27 +149,13 @@ pub fn watch() {
 	watch_path("./public");
 	watch_path("./templates");
 
-	let mut iter = false;
-
 	loop {
-		let x = match receiver.recv() {
-			Ok(event) => event,
+		match receiver.recv() {
+			Ok(_) => build_html(),
 			Err(e) => {
 				eprintln!("{} {:?}", "~> watch error:".red(), e);
 				exit(1)
 			}
 		};
-
-		if let DebouncedEvent::Error(e, path) = x {
-			err_handler(e, path);
-		}
-
-		// When saving a file, it emits the event 2 times
-		// This way we can make sure it only builds when needed
-		iter = !iter;
-
-		if iter {
-			build_html();
-		}
 	}
 }
