@@ -136,32 +136,33 @@ pub fn build_file(path: &Path) -> String {
 }
 
 fn copy_assets() {
-	let assets = PathBuf::from("./assets");
-	let dist = PathBuf::from("./dist");
+	fn copy_assets_recursively(assets_dir: &Path, dist_dir: &Path) {
+		for entry in read_dir(assets_dir).unwrap() {
+			let entry = &entry.unwrap();
+			let file_name = entry.file_name();
+			let file_path = assets_dir.join(&file_name);
+			let dist_dir = dist_dir.join(&file_name);
 
-	if !assets.exists() {
-		println!("{} 'assets' directory", "~> creating".bright_yellow());
+			if file_path.is_dir() {
+				copy_assets_recursively(&file_path, &dist_dir);
+			} else {
+				let dist_parent = dist_dir.parent().unwrap();
 
-		create_dir_all(&assets).unwrap_or_else(|e| {
-			println!("{} to create 'assets' directory: {}", "~> failed".red(), e);
-			exit(1);
-		});
-	}
+				if !dist_parent.exists() {
+					create_dir_all(dist_parent).unwrap();
+				}
 
-	for entry in read_dir(&assets).unwrap() {
-		let entry = &entry.unwrap();
-		let file_name = entry.file_name();
-		let file_path = assets.join(file_name.to_str().unwrap());
-		let file_path = file_path.to_owned();
-
-		println!("{} {}", "~> copied".bright_green(), file_path.display());
-
-		if entry.metadata().unwrap().is_dir() {
-			create_dir_all(dist.join(file_name)).unwrap();
-		} else {
-			copy(file_path, dist.join(file_name)).unwrap();
+				copy(&file_path, &dist_dir).unwrap();
+				println!("{} {}", "~> copied".bright_green(), file_path.display());
+			}
 		}
 	}
+	
+
+	let assets_dir = Path::new("./assets");
+    let dist_dir = Path::new("./dist");
+
+    copy_assets_recursively(assets_dir, dist_dir);	
 }
 
 pub fn release() {
