@@ -23,9 +23,10 @@ pub const PACKAGE_JSON: &str = concatln!(
 
 pub const DEPENDENCIES: &[&str] = &[
 	"rollup",
-	"rollup-plugin-terser",
-	"rollup-plugin-typescript2",
+	"@rollup/plugin-typescript",
+	"@rollup/plugin-terser",
 	"typescript",
+	"tslib",
 ];
 
 pub const PRETTIERRC: &str = concatln!(
