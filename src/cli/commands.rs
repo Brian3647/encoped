@@ -13,7 +13,7 @@ use std::process::Command;
 use std::sync::mpsc::channel;
 use std::time::Duration;
 
-use crate::build::build_html;
+use crate::build::compile;
 use crate::templates::base::DEPENDENCIES;
 use crate::templates::base::FILES;
 
@@ -131,7 +131,7 @@ fn spawn_rollup() {
 }
 
 pub fn watch() {
-	build_html();
+	compile();
 	spawn_rollup();
 	println!("{} for changes", "~> watching".bright_green());
 
@@ -151,7 +151,7 @@ pub fn watch() {
 
 	loop {
 		match receiver.recv() {
-			Ok(_) => build_html(),
+			Ok(_) => compile(),
 			Err(e) => {
 				eprintln!("{} {:?}", "~> watch error:".red(), e);
 				exit(1)

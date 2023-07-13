@@ -61,6 +61,7 @@ lazy_static::lazy_static! {
 		res.insert("templates/information/math.html", "Did you know 1 + 1 = 2?\n");
 		res.insert("templates/information/all.html", "<p>{{ templates::information/math }}</p>\n{{ templates::information/example }}\n");
 		res.insert("templates/information/example.html", "This is quiet.. add something in templates/information/example.html!\n");
+		res.insert("assets/style.css", ".red { color: red; }");
 
 		res
 	};

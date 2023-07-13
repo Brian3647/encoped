@@ -1,4 +1,6 @@
+use std::fs::copy;
 use std::fs::create_dir_all;
+use std::fs::read_dir;
 use std::fs::read_to_string;
 use std::fs::write as write_file;
 use std::fs::File;
@@ -19,7 +21,7 @@ lazy_static::lazy_static! {
 	};
 }
 
-pub fn build_html() {
+pub fn compile() {
 	let dist = PathBuf::from("./dist");
 	let templates = PathBuf::from("./templates");
 
@@ -133,10 +135,40 @@ pub fn build_file(path: &Path) -> String {
 	res
 }
 
+fn copy_extras() {
+	let extras = PathBuf::from("./extras");
+	let dist = PathBuf::from("./dist");
+
+	if !extras.exists() {
+		println!("{} 'extras' directory", "~> creating".bright_yellow());
+
+		create_dir_all(&extras).unwrap_or_else(|e| {
+			println!("{} to create 'extras' directory: {}", "~> failed".red(), e);
+			exit(1);
+		});
+	}
+
+	for entry in read_dir(&extras).unwrap() {
+		let entry = entry.unwrap();
+		let file_name = extras.file_name().unwrap().to_str().unwrap();
+		let file_path = extras.join(file_name);
+
+		let file_path = file_path.to_owned(); // Clone the file path.
+
+		if entry.metadata().unwrap().is_dir() {
+			create_dir_all(dist.join(file_name)).unwrap();
+		} else {
+			copy(file_path, dist.join(file_name)).unwrap();
+		}
+	}
+}
+
 pub fn release() {
-	println!("{}\n", "~> building (1/2): html".bright_magenta());
-	build_html();
-	println!("\n{}", "~> building (2/2): typescript".bright_magenta());
+	println!("{}\n", "~> building (1/3): html".bright_magenta());
+	compile();
+	println!("{}\n", "~> building (2/3): extras".bright_magenta());
+	copy_extras();
+	println!("\n{}", "~> building (2/3): typescript".bright_magenta());
 
 	Command::new("./node_modules/.bin/rollup")
 		.arg("-c")
