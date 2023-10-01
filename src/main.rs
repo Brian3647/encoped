@@ -11,7 +11,8 @@ fn main() {
 
 	match cli {
 		Cli::Build => build::release(),
+		Cli::BuildDev => build::dev(),
 		Cli::Watch => cli::commands::watch(),
-		Cli::New { dir, yarn } => cli::commands::new(&dir, yarn),
+		Cli::New { dir } => cli::commands::new(&dir),
 	}
 }

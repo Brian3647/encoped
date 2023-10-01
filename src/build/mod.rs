@@ -157,12 +157,11 @@ fn copy_assets() {
 			}
 		}
 	}
-	
 
 	let assets_dir = Path::new("./assets");
-    let dist_dir = Path::new("./dist");
+	let dist_dir = Path::new("./dist");
 
-    copy_assets_recursively(assets_dir, dist_dir);	
+	copy_assets_recursively(assets_dir, dist_dir);
 }
 
 pub fn release() {
@@ -172,14 +171,46 @@ pub fn release() {
 	copy_assets();
 	println!("{}", "~> building (2/3): typescript".bright_magenta());
 
-	Command::new("./node_modules/.bin/rollup")
-		.arg("-c")
+	Command::new("bun")
+    	.arg("build")
+		.arg("src/main.ts")
+		.arg("--target")
+		.arg("browser")
+		.arg("--minify")
+		.arg("--outfile")
+		.arg("dist/build.js")
 		.stdout(Stdio::inherit())
 		.stderr(Stdio::inherit())
 		.stdin(Stdio::inherit())
 		.output()
 		.unwrap_or_else(|e| {
-			eprintln!("{} : {}", "~> error in rollup:".red(), e);
+			eprintln!("{} : {}", "~> error in bun:".red(), e);
+			exit(1);
+		});
+
+	println!("\n{}", "~> building: done".bright_magenta());
+}
+
+pub fn dev() {
+	println!("{}", "~> building (1/3): html".bright_magenta());
+	compile();
+	println!("{}", "~> building (2/3): assets".bright_magenta());
+	copy_assets();
+	println!("{}", "~> building (2/3): typescript".bright_magenta());
+
+	Command::new("bun")
+    	.arg("build")
+		.arg("src/main.ts")
+		.arg("--target")
+		.arg("browser")
+		.arg("--outfile")
+		.arg("dist/build.js")
+		.stdout(Stdio::inherit())
+		.stderr(Stdio::inherit())
+		.stdin(Stdio::inherit())
+		.output()
+		.unwrap_or_else(|e| {
+			eprintln!("{} : {}", "~> error in bun:".red(), e);
 			exit(1);
 		});
 

@@ -14,10 +14,10 @@ use std::sync::mpsc::channel;
 use std::time::Duration;
 
 use crate::build::compile;
-use crate::templates::base::DEPENDENCIES;
+use crate::templates::base::DEV_DEPENDENCIES;
 use crate::templates::base::FILES;
 
-pub fn new(dir: &Path, yarn: bool) {
+pub fn new(dir: &Path) {
 	println!(
 		"{} a project in {}",
 		"~> creating".bright_green(),
@@ -58,9 +58,10 @@ pub fn new(dir: &Path, yarn: bool) {
 		});
 	});
 
-	Command::new(if yarn { "yarn" } else { "npm" })
-		.arg(if yarn { "add" } else { "install" })
-		.args(DEPENDENCIES)
+	Command::new("bun")
+		.arg("add")
+		.arg("-D")
+		.args(DEV_DEPENDENCIES)
 		.current_dir(dir)
 		.status()
 		.unwrap_or_else(|e| {
@@ -119,20 +120,20 @@ fn err_handler(e: Error, path: Option<PathBuf>) -> ! {
 	}
 }
 
-fn spawn_rollup() {
-	Command::new("./node_modules/.bin/rollup")
-		.arg("-c")
-		.arg("-w")
+fn spawn_bun() {
+	Command::new("bun")
+		.arg("run")
+		.arg("watch")
 		.spawn()
 		.unwrap_or_else(|e| {
-			eprintln!("{} unable to spawn rollup: {}", "~> error:".red(), e);
+			eprintln!("{} unable to spawn bun: {}", "~> error:".red(), e);
 			exit(1);
 		});
 }
 
 pub fn watch() {
 	compile();
-	spawn_rollup();
+	spawn_bun();
 	println!("{} for changes", "~> watching".bright_green());
 
 	let (sender, receiver) = channel();
