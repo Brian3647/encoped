@@ -17,7 +17,7 @@ pub const PACKAGE_JSON: &str = concatln!(
 	"\t\"private\": true,",
 	"\t\"type\": \"module\",",
 	"\t\"scripts\": {",
-	"\t\t\"watch\": \"watch 'encoped build-dev' . -p /node_modules|dist/\"",
+	"\t\t\"watch\": \"watch 'encoped build-dev' . -p '/node_modules|dist/' --wait 3\"",
 	"\t}",
 	"}"
 );
