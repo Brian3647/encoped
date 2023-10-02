@@ -169,14 +169,15 @@ pub fn release() {
 	compile();
 	println!("{}", "~> building (2/3): assets".bright_magenta());
 	copy_assets();
-	println!("{}", "~> building (2/3): typescript".bright_magenta());
+	println!("{}", "~> building (3/3): typescript".bright_magenta());
 
 	Command::new("bun")
     	.arg("build")
 		.arg("src/main.ts")
 		.arg("--target")
 		.arg("browser")
-		.arg("--minify")
+		.arg("--minify-syntax")
+		.arg("--minify-whitespace")
 		.arg("--outfile")
 		.arg("dist/build.js")
 		.stdout(Stdio::inherit())
@@ -196,7 +197,7 @@ pub fn dev() {
 	compile();
 	println!("{}", "~> building (2/3): assets".bright_magenta());
 	copy_assets();
-	println!("{}", "~> building (2/3): typescript".bright_magenta());
+	println!("{}", "~> building (3/3): typescript".bright_magenta());
 
 	Command::new("bun")
     	.arg("build")
